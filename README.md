@@ -1,5 +1,5 @@
-# Stack-chan LabRAG Voice Guide
-M5Stack CoreS3（製品版スタックちゃん）を「研究室案内AIロボット」として動作させるためのファームウェアです。<br>
+# Stack-chan RAG Voice Guide
+M5Stack CoreS3（製品版スタックちゃん）を「案内AIロボット」として動作させるためのファームウェアです。<br>
 CoreS3 の内蔵マイクで録音した音声を LAN 内の GPU サーバーへ送信し、サーバー側で高速音声認識（faster-whisper）→ 特化型ドキュメント検索・回答生成（E5 + FAISS + Ollama / Gemma 4）→ 音声合成（VOICEVOX）を一括処理して生成された WAV 音声を受信・再生します。発話に合わせてフルカラー LED の発光、表情変化、首振り、リップシンクを行います。
 
 ## 1. システム構成と動作概要
