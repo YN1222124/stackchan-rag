@@ -1,6 +1,6 @@
 # Stack-chan LabRAG Voice Guide
 M5Stack CoreS3（製品版スタックちゃん）を「研究室案内AIロボット」として動作させるためのファームウェアです。<br>
-CoreS3 の内蔵マイクで録音した音声を LAN 内の GPU サーバー（DGX Spark）へ送信し、サーバー側で高速音声認識（faster-whisper）→ 特化型ドキュメント検索・回答生成（E5 + FAISS + Ollama / Gemma 4）→ 音声合成（VOICEVOX）を一括処理して生成された WAV 音声を受信・再生します。発話に合わせてフルカラー LED の発光、表情変化、首振り、リップシンクを行います。
+CoreS3 の内蔵マイクで録音した音声を LAN 内の GPU サーバーへ送信し、サーバー側で高速音声認識（faster-whisper）→ 特化型ドキュメント検索・回答生成（E5 + FAISS + Ollama / Gemma 4）→ 音声合成（VOICEVOX）を一括処理して生成された WAV 音声を受信・再生します。発話に合わせてフルカラー LED の発光、表情変化、首振り、リップシンクを行います。
 
 ## 1. システム構成と動作概要
 ``` txt
@@ -26,9 +26,9 @@ CoreS3 の内蔵マイクで録音した音声を LAN 内の GPU サーバー（
 |:--|:--|
 |`main.cpp` (または `.ino`)	|本体側のメイン制御プログラム（録音・通信タスク・再生・サーボ・LED・状態遷移）|
 |`face.h`|画面の表情・視線・下部字幕（電光掲示板）の描画制御|
-|`secrets.h`|接続先 Wi-Fi 情報、DGX サーバーのアドレス、FastAPI 認証キーの定義|
+|`secrets.h`|接続先 Wi-Fi 情報、AIサーバーのアドレス、FastAPI 認証キーの定義|
 |`platformio.ini`|PlatformIO ビルド環境設定ファイル(ArduinoIDEであれば不要)|
-※ Arduino IDE で開発する場合は、プロジェクトフォルダ名をファイル名と同一（例: `StackChanLabRAG/StackChanLabRAG.ino`）にリネームして配置してください。
+※ Arduino IDE で開発する場合は、プロジェクトフォルダ名をファイル名と同一（例: `StackChanRAG/StackChanRAG.ino`）にリネームして配置してください。
 
 ## 3. 開発環境・ライブラリのセットアップ
 ライブラリ管理やボードマネージャのバージョン選定が柔軟な *Arduino IDE で依存ライブラリをダウンロード・管理し、PlatformIO からそれを参照してビルド・書き込みを行うハイブリッド方式* を採用しています。<br>
@@ -49,9 +49,6 @@ CoreS3 の内蔵マイクで録音した音声を LAN 内の GPU サーバー（
 ## 4. PlatformIO 設定 (`platformio.ini`)
 Arduino 環境のライブラリ（`lib_extra_dirs`）を参照させつつ、ESP32 標準の `WiFi` ライブラリと競合する余分なネットワークライブラリ（`WiFiNINA` や `HttpClient` 等）を `lib_ignore` で確実に除外します。
 ``` ini
-[platformio]
-core_dir = C:\pio
-
 [env:m5stack-cores3]
 platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip
 board = m5stack-cores3
@@ -63,9 +60,10 @@ upload_speed = 921600
 lib_deps =
     bblanchon/ArduinoJson@^7
 
-lib_extra_dirs = ~/Documents/Arduino/libraries # ArduinoIDEのライブラリをそのまま使用
+; Arduino IDE でインストールしたライブラリ（StackChan-BSP, M5Unified 等）を参照
+lib_extra_dirs = ~/Documents/Arduino/libraries
 
-# 除外するライブラリ（ESP-32ではWiFiNINAが使用できない）
+; ESP32 標準の WiFi と競合するライブラリを除外
 lib_ignore =
     WiFiNINA
     WiFiNINA-master
@@ -80,7 +78,7 @@ lib_ignore =
 #pragma once
 
 // Wi-Fi 設定 (ESP32 のため 2.4GHz 帯必須)
-const char* WIFI_SSID   = "YOUR_LAB_WIFI_2G";
+const char* WIFI_SSID   = "YOUR_LAB_WIFI;
 const char* WIFI_PASS   = "YOUR_WIFI_PASSWORD";
 
 // LLMを動かしているFastAPIのアドレスとポート
