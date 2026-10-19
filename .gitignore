@@ -1,0 +1,10 @@
+secrets.h
+src/secrets.h
+include/secrets.h
+
+.pio/
+.vscode/
+.idea/
+*.o
+*.bin
+*.elf
