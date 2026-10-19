@@ -10,7 +10,7 @@ CoreS3 の内蔵マイクで録音した音声を LAN 内の GPU サーバーへ
   3. WAV データを HTTP POST (multipart/form-data) で送信
        │
        ▼ LAN (Wi-Fi) / ポート 8001
-[DGX Spark (FastAPI)]
+[AIサーバー (FastAPI)]
   4. STT: faster-whisper で文字起こし
   5. RAG: 類似度検索 (E5 + FAISS) ＋ プロンプト生成 ＋ LLM (Ollama)
   6. TTS: VOICEVOX Engine で回答音声 (24kHz WAV) を合成
